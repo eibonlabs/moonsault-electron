@@ -1,0 +1,18 @@
+{
+  "name": "moonsault-electron",
+  "version": "1.2.3",
+  "description": "moonsault on electron!",
+  "main": "main.js",
+  "scripts": {
+    "build": "node build/build.js",
+    "start": "concurrently \"electron .\" \"npm run build\""
+  },
+  "author": "Eibon.labs",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "electron": "^29.1.4",
+    "esbuild": "^0.20.1",
+    "fs-extra": "^11.2.0"
+  }
+}
