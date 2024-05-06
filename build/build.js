@@ -40,8 +40,19 @@ const buildAndWatch = async () => {
         buildTools.copy(`./src/apps/${app}/favicon.png`, `./public/apps/${app}/favicon.png`);
         buildTools.copy(`./src/apps/${app}/assets`, `./public/apps/${app}/assets`);
         await context.watch();
+
+        fs.watch(`./src/apps/${app}/assets`, { recursive: true }, (eventType, fileName) => {
+            if (eventType === 'change') {
+                buildTools.copy(`./src/apps/${app}/assets/${fileName}`, `./public/apps/${app}/assets/${fileName}`);
+            }
+        });
         console.log('Build complete and watching for changes.');
     }
+    fs.watch(`./src/assets`, { recursive: true }, (eventType, fileName) => {
+        if (eventType === 'change') {
+            buildTools.copy(`./src/assets/${fileName}`, `./public/assets/${fileName}`);
+        }
+    });
 }
 
 

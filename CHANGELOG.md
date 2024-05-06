@@ -1,5 +1,9 @@
 # Changelog
 
+## v.1.2.4
+
+- hot reloading of assets directory
+
 ## v.1.2.3
 
 - added server side dependency for concurrently in order to make development on Windows a little easier.
