@@ -21,7 +21,6 @@ const buildAndWatchMoonsaultLibrary = async () => {
         outfile: `./public/lib/moonsault.js`
     });
     await libContext.watch();
-    buildTools.copy('./src/lib', './public/lib');
 };
 
 const watchMoonsaultIndex = () => {
