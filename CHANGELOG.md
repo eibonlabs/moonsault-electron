@@ -1,5 +1,9 @@
 # Changelog
 
+## v.1.2.6
+
+- support loading from sub directories on server
+
 ## v.1.2.5
 
 - update build process
