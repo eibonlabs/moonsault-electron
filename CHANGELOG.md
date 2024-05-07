@@ -1,5 +1,9 @@
 # Changelog
 
+## v.1.2.7
+
+- refactor build process
+
 ## v.1.2.6
 
 - support loading from sub directories on server
