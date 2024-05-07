@@ -15,7 +15,7 @@ buildTools.copy('./src/favicon.png', './public/favicon.png');
 buildTools.copy('./src/assets', './public/assets');
 
 // copy lib directory to public
-buildTools.copy('./src/lib', './public/lib');
+// buildTools.copy('./src/lib', './public/lib');
 
 let apps = [];
 
@@ -28,6 +28,16 @@ fs.readdirSync('./src/apps/').filter((file) => {
 // copy and build apps
 const buildAndWatch = async () => {
     for (let app of apps) {
+        // build moonsault library
+        let libContext = await esbuild.context({
+            bundle: true,
+            minify: true,
+            sourcemap: true,
+            entryPoints: [`./src/lib/moonsault.js`],
+            outfile: `./public/lib/moonsault.js`
+        });
+
+        // build moonsault apps
         let context = await esbuild.context({
             bundle: true,
             minify: true,
@@ -39,6 +49,7 @@ const buildAndWatch = async () => {
         buildTools.copy(`./src/apps/${app}/index.html`, `./public/apps/${app}/index.html`);
         buildTools.copy(`./src/apps/${app}/favicon.png`, `./public/apps/${app}/favicon.png`);
         buildTools.copy(`./src/apps/${app}/assets`, `./public/apps/${app}/assets`);
+        await libContext.watch();
         await context.watch();
 
         fs.watch(`./src/apps/${app}/assets`, { recursive: true }, (eventType, fileName) => {
@@ -54,6 +65,5 @@ const buildAndWatch = async () => {
         }
     });
 }
-
 
 buildAndWatch();

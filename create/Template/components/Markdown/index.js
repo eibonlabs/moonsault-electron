@@ -12,8 +12,13 @@ customElements.define(componentName, class extends HTMLElement {
 
         buildComponent(componentName, html, css, this);
         console.info('Markdown Page Connected');
-        const src = `${moonsault.currentAppPath}assets/content/${this.getAttribute('data-src')}`;
-        this.getMarkdownFile(src);
+        if (this.getAttribute('data-src').indexOf('http') === -1) {
+            const src = `${moonsault.currentAppPath}assets/content/${this.getAttribute('data-src')}`;
+            this.getMarkdownFile(src);
+        } else {
+            const src = this.getAttribute('data-src');
+            this.getMarkdownFile(src);
+        }
     }
 
     async getMarkdownFile(src) {
