@@ -1,5 +1,5 @@
 const html = `
-<h3>Page not found!</h3>
+<h1>Page not found!</h1>
 `;
 
 export default html;

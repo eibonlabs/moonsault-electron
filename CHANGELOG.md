@@ -1,5 +1,12 @@
 # Changelog
 
+## v.1.2.5
+
+- update build process
+- minify moonsault libraries
+- update template
+- update markdown component to accept remote urls
+
 ## v.1.2.4
 
 - hot reloading of assets directory

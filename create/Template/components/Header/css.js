@@ -8,7 +8,13 @@ c-header h1 {
   font-size:20px;
   font-weight:bold;
   margin:0px 0px 4px 0px;
-  color:#c80b95;
+  color:#f76ed3;
+}
+
+c-header h2 {
+  position:absolute;
+  top:-999px;
+  left:-999px;
 }
 
 c-header nav {

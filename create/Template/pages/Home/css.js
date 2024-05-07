@@ -2,7 +2,7 @@ const css = `
   p-home {
   }
   
-  p-home h3 {
+  p-home h1 {
     font-size:20px;
     margin-bottom:20px;
   }

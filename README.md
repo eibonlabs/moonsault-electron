@@ -296,7 +296,7 @@ Moonsault has been scanned with [sonarqube](https://www.sonarsource.com/products
 
 ## Markdown
 
-This component is used for displaying markdown content. Markdown files go in your application's `assets/content` directory. The following code shows how you would use the component:
+This component is used for displaying markdown content. Markdown files go in your application's `assets/content` directory, but you can also point to any URL that you want. The following code shows how you would use the component:
 
 `<c-markdown data-src="HelloWorld.md"></c-markdown>`
 
