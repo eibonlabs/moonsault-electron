@@ -7,6 +7,8 @@ Quick Start:
 1. Run `npm install` to install dependencies.
 2. Run `node create` to create applications, components and pages.
 3. Run `npm run start` to start up the application.
+4. Run `npm run package` to build a stand alone application.
+5. If you make any changes to your app, make sure to run `npm run start` again before running `npm run package`.
 
 # MOONSAULT
 
