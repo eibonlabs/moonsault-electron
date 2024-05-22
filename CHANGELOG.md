@@ -1,5 +1,11 @@
 # Changelog
 
+## v.1.2.8
+
+- fix bug for going directly to an app through the URL
+- remove marked.js from lib directory since it is part of the component
+- fix transition bug
+
 ## v.1.2.7
 
 - refactor build process
