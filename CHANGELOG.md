@@ -1,5 +1,9 @@
 # Changelog
 
+## v.1.2.9
+
+- refactor how backend services are organized and loaded
+
 ## v.1.2.8
 
 - fix bug for going directly to an app through the URL
