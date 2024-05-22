@@ -95,7 +95,12 @@ const setCurrentApp = () => {
  * @description sets the path of current application that is being loaded by moonsault
  */
 const setCurrentAppPath = () => {
-    moonsault.currentAppPath = window.location.href.split('/#/')[0] + '/apps/' + moonsault.currentApp + '/';
+    if (window.location.href.indexOf('apps') === -1) {
+        moonsault.currentAppPath = `${window.location.href.split('/#/')[0]}/apps/${moonsault.currentApp}/`;
+    } else {
+        moonsault.currentAppPath = `${window.location.href.split('/#/')[0]}/`;
+    }
+
     if (moonsault.electron === true) {
         moonsault.currentAppPath = 'apps/' + moonsault.currentApp + '/';
     }

@@ -1,10 +1,3 @@
-
-
-const clearPage = () => {
-    const pageElement = document.querySelector('#page');
-    pageElement.textContent = '';
-};
-
 const setPage = (page, route) => {
     const pageElement = document.querySelector('#page');
     moonsault.pageComponents = {};
@@ -42,8 +35,6 @@ const resolveRoute = () => {
     let page = moonsault.routes[getRouteFromURL()];
 
     if (getRouteFromURL() !== '') {
-        clearPage();
-
         if (!page) {
             page = moonsault.routes['#/error'];
         }
