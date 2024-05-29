@@ -9,16 +9,6 @@ import css from './css.js';
 customElements.define(componentName, class extends HTMLElement {
     constructor() {
         super();
-
-        buildComponent(componentName, html, css, this);
-        const currentRoute = getRouteFromURL();
-        const anchors = this.querySelectorAll('nav a');
-
-        this.querySelector(`a[href="${currentRoute}"]`)?.setAttribute('aria-current', 'page');
-        this.anchors = this.querySelectorAll('a');
-        for (const anchor of this.anchors) {
-            this.setAriaCurrentAttribute(anchor);
-        }
     }
 
     setAriaCurrentAttribute(anchor) {
@@ -31,5 +21,15 @@ customElements.define(componentName, class extends HTMLElement {
     // connect component
     connectedCallback() {
         console.info('Header Component Connected');
+
+        buildComponent(componentName, html, css, this);
+        const currentRoute = getRouteFromURL();
+        const anchors = this.querySelectorAll('nav a');
+
+        this.querySelector(`a[href="${currentRoute}"]`)?.setAttribute('aria-current', 'page');
+        this.anchors = this.querySelectorAll('a');
+        for (const anchor of this.anchors) {
+            this.setAriaCurrentAttribute(anchor);
+        }
     }
 });

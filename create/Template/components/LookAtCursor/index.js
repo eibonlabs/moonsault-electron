@@ -8,7 +8,6 @@ import css from './css.js';
 customElements.define(componentName, class extends HTMLElement {
     constructor() {
         super();
-        buildComponent(componentName, html, css, this);
     }
 
 
@@ -20,6 +19,8 @@ customElements.define(componentName, class extends HTMLElement {
         </c-look-at-cursor>
         */
         console.info('LookAtCursor Component Connected');
+
+        buildComponent(componentName, html, css, this);
 
         /* based on the examples shown here: https://www.armandocanals.com/posts/CSS-transform-rotating-a-3D-object-perspective-based-on-mouse-position.html */
 

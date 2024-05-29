@@ -373,7 +373,7 @@ If no data-origin-element attribute is specifed, or it is empty, it will track f
 
 ## Window (Beta)
 
-This is a component that can be used to wrap an existing component in a window GUI. It provides functionality for maximizing, minimizing, resizing and closing windows. In order for maximizing and minimizing to work correctly, you'll need to make sure the parent container of the window is positioned in a way to allow for maximizing and minimizing to work (this usually means setting a fixed width and height to 100%).
+This is a component that can be used to wrap an existing component in a window GUI. It provides functionality for maximizing, minimizing, resizing, and closing windows. In order for maximizing and minimizing to work correctly, you'll need to make sure the parent container of the window is positioned in a way to allow for maximizing and minimizing to work (this usually means setting positioning to fixed, with a width and height to defined).
 
 Here is an example of the html used for including a windowed component:
 

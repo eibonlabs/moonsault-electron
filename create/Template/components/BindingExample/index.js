@@ -10,7 +10,6 @@ import css from './css.js';
 customElements.define(componentName, class extends HTMLElement {
     constructor() {
         super();
-        buildComponent(componentName, html, css, this);
     }
 
     exampleCallback(value) {
@@ -47,6 +46,8 @@ customElements.define(componentName, class extends HTMLElement {
     // connect component
     connectedCallback() {
         console.info('Binding Example Component Connected');
+
+        buildComponent(componentName, html, css, this);
 
         bind(this.#exampleVars, "test", 0, this.querySelector(".test"));
         bind(this.#exampleVars, "test2", 0, this.querySelector(".test2"));

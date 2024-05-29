@@ -24,36 +24,6 @@ import css from './css.js';
 customElements.define(componentName, class extends HTMLElement {
     constructor() {
         super();
-
-        buildComponent(componentName, html, css, this);
-
-        this.classList.add('window-parent');
-
-        this.#setModel();
-
-        this.#setWindowContents();
-
-        this.#setBringToFront();
-
-        if (this.#model.draggable === 'true') {
-            this.#setDraggable();
-        }
-
-        if (this.#model.maximize === 'true') {
-            this.#setMaximize();
-        }
-
-        if (this.#model.minimize === 'true') {
-            this.#setMinimize();
-        }
-
-        if (this.#model.close === 'true') {
-            this.#setClose();
-        }
-
-        if (this.#model.resizable === 'true') {
-            this.#enableResizable();
-        }
     }
 
     #model = {
@@ -78,6 +48,16 @@ customElements.define(componentName, class extends HTMLElement {
         prevHeight: null
     };
 
+    #windowStack = [];
+
+    #buildWindowStack() {
+        this.#windowStack = [];
+        const windows = document.querySelectorAll('.window-parent');
+        for (const window of windows) {
+            this.#windowStack.push(window);
+        }
+    }
+
     getModel() {
         return this.#model;
     }
@@ -100,30 +80,39 @@ customElements.define(componentName, class extends HTMLElement {
         this.#model.close = this.getAttribute('data-close');
     }
 
-    bringToFront() {
-        const thisWindow = this;
-        const windowsContainer = thisWindow.parentElement;
-        windowsContainer.append(thisWindow);
+    #renderStack() {
+        let order = 0;
+        for (const window of this.#windowStack) {
+            window.style.zIndex = order;
+            order += 1;
+        }
     }
 
-    // when clicking a titlebar, set that window to be on top
-    #setBringToFront() {
-        this.addEventListener('click', (e) => {
-            this.bringToFront();
-        });
+    #bringToFront(thisWindow) {
+        this.#buildWindowStack();
+        let order = 0;
+        for (const window of this.#windowStack) {
+            if (window === thisWindow) {
+                this.#windowStack.push(this.#windowStack.splice(order, 1)[0]);
+            }
+            order += 1;
+        }
+        this.#renderStack();
     }
 
     maxmize() {
+        const parentBounds = this.parentElement.getBoundingClientRect();
+
         if (this.#model.minimized === false) {
             if (this.#model.maximized === false) {
                 this.#model.prevX = this.#model.xPosition;
                 this.#model.prevY = this.#model.yPosition;
                 this.#model.prevWidth = this.offsetWidth;
                 this.#model.prevHeight = this.offsetHeight;
-                this.#model.xPosition = 0;
-                this.#model.yPosition = 0;
-                this.#model.width = this.parentElement.offsetWidth + 'px';
-                this.#model.height = this.parentElement.offsetHeight + 'px';
+                this.#model.xPosition = parentBounds.x + 'px';
+                this.#model.yPosition = parentBounds.y + 'px';
+                this.#model.width = parentBounds.width + 'px';
+                this.#model.height = parentBounds.height + 'px';
                 this.#model.maximized = true;
                 this.#model.disableDrag = true;
                 if (this.#model.resizable === 'true') {
@@ -144,11 +133,10 @@ customElements.define(componentName, class extends HTMLElement {
                     this.#enableResizable();
                 }
             }
-
             setTimeout(() => {
                 this.classList.add('transtionWindowState');
                 this.#render();
-            }, 100);
+            }, 0);
         }
     }
 
@@ -159,13 +147,15 @@ customElements.define(componentName, class extends HTMLElement {
     }
 
     minimize() {
+        const parentBounds = this.parentElement.getBoundingClientRect();
+
         if (this.#model.maximized === false) {
             if (this.#model.minimized === false) {
                 this.#model.prevX = this.#model.xPosition;
                 this.#model.prevY = this.#model.yPosition;
                 this.#model.prevWidth = this.offsetWidth;
                 this.#model.prevHeight = this.offsetHeight;
-                this.#model.yPosition = this.parentElement.offsetHeight - this.querySelector('.window-title-bar').offsetHeight;
+                this.#model.yPosition = (parentBounds.y + parentBounds.height) - this.querySelector('.window-title-bar').offsetHeight + 'px';
                 this.#model.width = this.querySelector('.window-title-bar').offsetWidth + 'px';
                 this.#model.height = this.querySelector('.window-title-bar').offsetHeight + 'px';
                 this.#model.minimized = true;
@@ -192,7 +182,7 @@ customElements.define(componentName, class extends HTMLElement {
             setTimeout(() => {
                 this.classList.add('transtionWindowState');
                 this.#render();
-            }, 100);
+            }, 0);
         }
     }
 
@@ -240,11 +230,11 @@ customElements.define(componentName, class extends HTMLElement {
             e.preventDefault();
 
             if (e.type === "touchmove") {
-                this.#model.xPosition = e.touches[0].clientX - this.#model.xOffset
-                this.#model.yPosition = e.touches[0].clientY - this.#model.yOffset;
+                this.#model.xPosition = e.touches[0].clientX - this.#model.xOffset + 'px'
+                this.#model.yPosition = e.touches[0].clientY - this.#model.yOffset + 'px';
             } else {
-                this.#model.xPosition = e.clientX - this.#model.xOffset;
-                this.#model.yPosition = e.clientY - this.#model.yOffset;
+                this.#model.xPosition = e.clientX - this.#model.xOffset + 'px';
+                this.#model.yPosition = e.clientY - this.#model.yOffset + 'px';
             }
 
             this.#render();
@@ -252,28 +242,30 @@ customElements.define(componentName, class extends HTMLElement {
     };
 
     #dragWindowStart(e) {
-        const thisComponent = e.target.closest('.window-parent');
-        thisComponent.bringToFront();
+        if (e.target.classList.contains('window-controls') === false &&
+            e.target.classList.contains('window-maximize') === false &&
+            e.target.classList.contains('window-minimize') === false &&
+            e.target.classList.contains('window-close') === false) {
+            const thisComponent = e.target.closest('.window-parent:not(.window-maximize)');
+            thisComponent.#bringToFront(thisComponent);
 
-        if (thisComponent.#model.disableDrag === false) {
-            const element = e.target;
-            const elementBounds = element.getBoundingClientRect();
-            thisComponent.#model.dragging = true;
-            thisComponent.#model.xOffset = e.clientX - elementBounds.left + 2;
-            thisComponent.#model.yOffset = e.clientY - elementBounds.top + 2;
+            if (thisComponent.#model.disableDrag === false) {
+                const elementBounds = thisComponent.getBoundingClientRect();
+                thisComponent.#model.dragging = true;
+                thisComponent.#model.xOffset = e.clientX - elementBounds.left + 2;
+                thisComponent.#model.yOffset = e.clientY - elementBounds.top + 2;
+            }
         }
     }
 
     #setDraggable() {
-        const titlebar = this.querySelector('.window-title-bar h3');
-        titlebar.addEventListener("touchstart", this.#dragWindowStart, false);
-        titlebar.addEventListener("touchend", this.#windowInteractionEnd, false);
-        titlebar.addEventListener("touchmove", this.#dragWindow, false);
+        this.parentElement.addEventListener("touchstart", this.#dragWindowStart, false);
+        this.parentElement.addEventListener("touchend", this.#windowInteractionEnd, false);
+        this.parentElement.addEventListener("touchmove", this.#dragWindow, false);
 
-        titlebar.addEventListener("mousedown", this.#dragWindowStart, false);
-        this.addEventListener("mouseup", this.#windowInteractionEnd, false);
-        titlebar.addEventListener("mouseup", this.#windowInteractionEnd, false);
-        titlebar.addEventListener("mousemove", this.#dragWindow, false);
+        this.parentElement.addEventListener("mousedown", this.#dragWindowStart, false);
+        this.parentElement.addEventListener("mouseup", this.#windowInteractionEnd, false);
+        this.parentElement.addEventListener("mousemove", this.#dragWindow, false);
     }
 
     #disableResize() {
@@ -285,8 +277,8 @@ customElements.define(componentName, class extends HTMLElement {
     }
 
     #render() {
-        this.style.top = `${this.#model.yPosition}px`;
-        this.style.left = `${this.#model.xPosition}px`;
+        this.style.top = this.#model.yPosition;
+        this.style.left = this.#model.xPosition;
         this.style.height = this.#model.height;
         this.style.width = this.#model.width;
         this.style.height = this.#model.height;
@@ -310,6 +302,36 @@ customElements.define(componentName, class extends HTMLElement {
 
     // connect component
     connectedCallback() {
+        buildComponent(componentName, html, css, this);
+
+        this.classList.add('window-parent');
+
+        this.#setModel();
+
+        this.#setWindowContents();
+
+        this.#buildWindowStack();
+
+        if (this.#model.draggable === 'true') {
+            this.#setDraggable();
+        }
+
+        if (this.#model.maximize === 'true') {
+            this.#setMaximize();
+        }
+
+        if (this.#model.minimize === 'true') {
+            this.#setMinimize();
+        }
+
+        if (this.#model.close === 'true') {
+            this.#setClose();
+        }
+
+        if (this.#model.resizable === 'true') {
+            this.#enableResizable();
+        }
+
         this.#render();
     }
 });
