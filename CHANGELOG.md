@@ -1,5 +1,10 @@
 # Changelog
 
+## v.1.3.0
+
+- move buildComponent() to connectedCallback(). this fixes an issue with dynamically injecting child components.
+- refactor window component
+
 ## v.1.2.9
 
 - refactor how backend services are organized and loaded

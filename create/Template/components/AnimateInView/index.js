@@ -15,12 +15,13 @@ customElements.define(componentName, class extends HTMLElement {
 
     constructor() {
         super();
-        buildComponent(componentName, html, css, this);
     }
 
     // connect component
     connectedCallback() {
         console.info('AnimateInView Component Connected');
+
+        buildComponent(componentName, html, css, this);
 
         const thisComponent = this;
 

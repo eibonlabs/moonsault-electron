@@ -9,16 +9,6 @@ import css from './css.js';
 customElements.define(componentName, class extends HTMLElement {
     constructor() {
         super();
-
-        buildComponent(componentName, html, css, this);
-        console.info('Markdown Page Connected');
-        if (this.getAttribute('data-src').indexOf('http') === -1) {
-            const src = `${moonsault.currentAppPath}assets/content/${this.getAttribute('data-src')}`;
-            this.getMarkdownFile(src);
-        } else {
-            const src = this.getAttribute('data-src');
-            this.getMarkdownFile(src);
-        }
     }
 
     async getMarkdownFile(src) {
@@ -36,5 +26,15 @@ customElements.define(componentName, class extends HTMLElement {
     // connect component
     connectedCallback() {
         console.info('MarkDown Component Connected');
+
+        buildComponent(componentName, html, css, this);
+
+        if (this.getAttribute('data-src').indexOf('http') === -1) {
+            const src = `${moonsault.currentAppPath}assets/content/${this.getAttribute('data-src')}`;
+            this.getMarkdownFile(src);
+        } else {
+            const src = this.getAttribute('data-src');
+            this.getMarkdownFile(src);
+        }
     }
 });

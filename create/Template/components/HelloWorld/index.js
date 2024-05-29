@@ -8,11 +8,6 @@ import css from './css.js';
 customElements.define(componentName, class extends HTMLElement {
     constructor() {
         super();
-
-        buildComponent(componentName, html, css, this);
-        this.querySelector('#helloWorldButton').addEventListener('click', (e) => {
-            this.helloWorld();
-        })
     }
 
     helloWorld() {
@@ -23,5 +18,10 @@ customElements.define(componentName, class extends HTMLElement {
     // connect component
     connectedCallback() {
         console.info('HelloWorld Component Connected');
+
+        buildComponent(componentName, html, css, this);
+        this.querySelector('#helloWorldButton').addEventListener('click', (e) => {
+            this.helloWorld();
+        })
     }
 });
