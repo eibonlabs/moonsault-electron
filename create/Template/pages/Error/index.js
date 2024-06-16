@@ -8,12 +8,11 @@ import css from './css.js';
 customElements.define(componentName, class extends HTMLElement {
     constructor() {
         super();
-
-        buildComponent(componentName, html, css, this);
     }
 
     // connect component
     connectedCallback() {
+        buildComponent(componentName, html, css, this);
         console.info('Error Page Connected');
     }
 });
