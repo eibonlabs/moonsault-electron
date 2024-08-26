@@ -80,6 +80,46 @@ const watchMoonsaultAppsAssets = (app) => {
     });
 };
 
+const buildAndWatchMoonsaultComponents = (app) => {
+    fs.readdirSync(`./src/apps/${app}/components`).filter((directory) => {
+        if (fs.existsSync(`./src/apps/${app}/components/${directory}/index.html`)) {
+            fs.watch(`./src/apps/${app}/components/${directory}/index.html`, { recursive: true }, (eventType, fileName) => {
+                if (eventType === 'change') {
+                    buildTools.copy(`./src/apps/${app}/components/${directory}/index.html`, `./public/apps/${app}/components/${directory}/index.html`);
+                }
+            });
+        }
+
+        if (fs.existsSync(`./src/apps/${app}/components/${directory}/index.css`)) {
+            fs.watch(`./src/apps/${app}/components/${directory}/index.css`, { recursive: true }, (eventType, fileName) => {
+                if (eventType === 'change') {
+                    buildTools.copy(`./src/apps/${app}/components/${directory}/index.css`, `./public/apps/${app}/components/${directory}/index.css`);
+                }
+            });
+        }
+    });
+}
+
+const buildAndWatchMoonsaultPages = (app) => {
+    fs.readdirSync(`./src/apps/${app}/pages`).filter((directory) => {
+        if (fs.existsSync(`./src/apps/${app}/pages/${directory}/index.html`)) {
+            fs.watch(`./src/apps/${app}/pages/${directory}/index.html`, { recursive: true }, (eventType, fileName) => {
+                if (eventType === 'change') {
+                    buildTools.copy(`./src/apps/${app}/pages/${directory}/index.html`, `./public/apps/${app}/pages/${directory}/index.html`);
+                }
+            });
+        }
+
+        if (fs.existsSync(`./src/apps/${app}/pages/${directory}/index.css`)) {
+            fs.watch(`./src/apps/${app}/pages/${directory}/index.css`, { recursive: true }, (eventType, fileName) => {
+                if (eventType === 'change') {
+                    buildTools.copy(`./src/apps/${app}/pages/${directory}/index.css`, `./public/apps/${app}/pages/${directory}/index.css`);
+                }
+            });
+        }
+    });
+}
+
 const buildAndWatch = () => {
     // build apps array
     buildAppsArray();
@@ -97,11 +137,18 @@ const buildAndWatch = () => {
         // copy app favicon to public
         buildTools.copy(`./src/apps/${app}/favicon.png`, `./public/apps/${app}/favicon.png`);
 
+        // copy services
+        buildTools.copy(`./src/apps/${app}/api`, `./public/apps/${app}/api`);
+
         // copy app index.html to public
         watchMoonsaultAppIndex(app);
 
         // watch moonsault app assets
         watchMoonsaultAppsAssets(app);
+
+        // copy moonsault component and page assets (index.html and index.css)
+        buildAndWatchMoonsaultComponents(app);
+        buildAndWatchMoonsaultPages(app);
 
         // build moonsault app javascript
         buildAndWatchMoonsaultApp(app);
