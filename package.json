@@ -1,6 +1,6 @@
 {
   "name": "moonsault-electron",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "moonsault on electron!",
   "main": "main.js",
   "scripts": {
