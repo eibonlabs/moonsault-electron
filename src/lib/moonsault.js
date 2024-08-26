@@ -96,7 +96,11 @@ const setCurrentApp = () => {
  */
 const setCurrentAppPath = () => {
     if (window.location.href.indexOf('apps') === -1) {
-        moonsault.currentAppPath = `${window.location.href.split('/#/')[0]}/apps/${moonsault.currentApp}/`;
+        if (window.location.hash === '') {
+            moonsault.currentAppPath = `${window.location.href.split('/#/')[0]}apps/${moonsault.currentApp}/`;
+        } else {
+            moonsault.currentAppPath = `${window.location.href.split('/#/')[0]}/apps/${moonsault.currentApp}/`;
+        }
     } else {
         moonsault.currentAppPath = `${window.location.href.split('/#/')[0]}/`;
     }
